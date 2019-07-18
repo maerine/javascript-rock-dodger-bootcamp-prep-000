@@ -28,13 +28,13 @@ function checkCollision(rock) {
   if (top > 360) {
     const dodgerLeftEdge = positionToInteger(DODGER.style.left)
 
-    // FIXME: The DODGER is 40 pixels wide -- how do we get the right edge?
-    const dodgerRightEdge = 0;
+    // FIXME: The DODGER is 40 pixels wide -- how do we get the right edge? relative to dodgerLeftEdge?
+    const dodgerRightEdge = 360;
 
     const rockLeftEdge = positionToInteger(rock.style.left)
 
     // FIXME: The rock is 20 pixel's wide -- how do we get the right edge?
-    const rockRightEdge = 0;
+    const rockRightEdge = 380;
 
     if (false /**
                * Think about it -- what's happening here?
@@ -111,6 +111,13 @@ function endGame() {
 }
 
 function moveDodger(e) {
+  document.addEventListener('keydown', function(e) {
+    if (e.which === LEFT_ARROW) {
+      moveDodgerLeft();
+    } else if (e.which === RIGHT_ARROW) {
+      moveDodgerRight();
+    }
+  })
   // implement me!
   /**
    * This function should call `moveDodgerLeft()`
@@ -122,6 +129,13 @@ function moveDodger(e) {
 }
 
 function moveDodgerLeft() {
+  var leftNumbers = dodger.style.left.replace('px', '');
+  var left = parseInt(leftNumbers, 10);
+ 
+  if (left > 0) {
+    dodger.style.left = `${left - 4}px`;
+  }
+
   // implement me!
   /**
    * This function should move DODGER to the left
@@ -135,6 +149,20 @@ function moveDodgerRight() {
    * This function should move DODGER to the right
    * (mabye 4 pixels?). Use window.requestAnimationFrame()!
    */
+  
+  var leftNumbers = dodger.style.left.replace('px', '');
+  var left = parseInt(leftNumbers, 10);
+ 
+  function dodgeRight() {
+    dodger.style.left = `${left + 4}px`;
+  
+      if (left < 360) {
+    
+        window.requestAnimationFrame(dodgeRight);
+    }
+  }
+  
+  window.requestAnimationFrame(dodgeRight);
 }
 
 /**
